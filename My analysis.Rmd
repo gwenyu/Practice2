@@ -1,0 +1,32 @@
+---
+title: "analysis"
+author: "gwenyu"
+date: "March 2, 2016"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+did you know that the squaer root of 3 is `r sqrt(3)` .
+```{r}
+height <- c(72, 71, 73)
+ave_height <- mean(height)
+sd_height <- sd(height)
+```
+
+in our study, we measured the heights of `r length(height)` individuals. Their average height was `r ave_height` (sd+ `r sd_height`). That's so cool. 
+
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

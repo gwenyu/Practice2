@@ -1,0 +1,52 @@
+---
+title: "Microbiol612+HW1"
+author: "gwenyu"
+date: "March 17, 2016"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+First read in the "gapminder" dataset and load "ggplot" and "plyr" packages that we will be using:
+
+```{r}
+library(plyr)
+library("ggplot2")
+gapminder <- read.table(file="/Users/WGreene/Practice2/data/gapminder-FiveYearData.csv",sep=',', header=T)
+head(gapminder)
+```
+
+For this assignment, I'd like to see if there is relation between GDP per capita and population. 
+
+We can directly plot gpdPercap vs. population:
+
+```{r, echo=FALSE}
+ggplot(data=gapminder, aes(x=pop, y=gdpPercap, color=continent))+geom_point()
+```
+
+But it dosen't look very nice. There're too many points and it's difficult to see a general trend. So instead, we can combine the data for each continent. 
+
+To do this, we can (1) calculate the total population for each continent each year (called tpop), (2) calculate the total GDP by summing "gdpPercap * population" for all countries per continent per year (called tgdp). 
+(3) The averaged gdpPercap for each continent = tgdp / tpop.
+Combine these data, I made a new table called "summary". 
+
+```{r}
+summary <- ddply(.data = gapminder, .variable = c("continent","year"), summarize, tpop = sum(pop), tgdp = sum(pop * gdpPercap), aveGdp = tgdp/tpop)
+```
+
+Now we can plot gdpPercap vs population:
+
+```{r, echo=FALSE}
+ggplot(data=summary, aes(x=tpop, y=aveGdp, color=continent))+geom_point()
+```
+
+It's quite clear now that there's positive correlation between GDP per capita and population. We can fit a simple relationship to the data by adding another layer:
+
+```{r, echo=FALSE}
+ggplot(data=summary, aes(x=tpop, y=aveGdp, color=continent))+geom_point()+geom_smooth(method="lm")
+```
+
+The positive correlation between GDP per capita and population indicates that generally larger population can increases productivity and thus, increases GDP per capita. The slope for Americas, Europe, and Oceania are much steeper than Asia and Africa. For Asia, it may be because that the large population base makes the averaged GDP lower. And for Africa, the unstable political and economical situlation probably affect the GDP largely. 
+
